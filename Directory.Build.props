@@ -30,12 +30,13 @@
 		<IsTestProject>true</IsTestProject>
 		<CollectCoverage>true</CollectCoverage>
 		<CoverletOutputFormat>cobertura</CoverletOutputFormat>
-		<!-- Coverage ratchet (per-class minimum: every class must clear the floor). Seeded at zero so the first build is green; raise to the measured minimum after the first green build-gate.sh run; never lower. -->
-		<Threshold>0,0,0</Threshold>
+		<!-- Coverage ratchet (per-class minimum: every class must clear the floor). Set to the measured minimum after the first green build-gate.sh run; never lower. -->
+		<Threshold>100,100,100</Threshold>
 		<ThresholdType>line,branch,method</ThresholdType>
 		<ThresholdStat>minimum</ThresholdStat>
 		<!-- Exception types are plumbing; exclude from coverage to avoid noise. -->
-		<Exclude>[*]*Exception</Exclude>
+		<!-- Architecture.Testing is test infrastructure, not shipped code: it carries base rules this repo's derived tests may not all exercise, so measuring it would set the floor from the test harness rather than the package. -->
+		<Exclude>[*]*Exception,[Architecture.Testing]*</Exclude>
 		<!-- Source-generated files (e.g. [LoggerMessage] partials) are plumbing too. -->
 		<ExcludeByFile>**/obj/**/*.g.cs</ExcludeByFile>
 		<!-- CA1707 underscores-in-names : test methods use Method_Scenario_Outcome. -->

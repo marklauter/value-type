@@ -5,21 +5,34 @@
 	<PropertyGroup>
 		<IsPackable>true</IsPackable>
 		<PackageId>MSL.$(AssemblyName)</PackageId>
-		<Title>ValueTypes — TODO: one-line summary of what this package does</Title>
+		<Title>ValueTypes — parse-don't-validate wrappers for the primitives your domain cares about</Title>
 		<Authors>Mark Lauter</Authors>
-		<Description>TODO: package description.</Description>
+		<Description>Contracts for strongly-typed wrappers that embed a primitive in the domain. IValue&lt;TSelf, TValue&gt; is self-referential (CRTP) so its static abstract members resolve through the type parameter at every call site: two arrows in — the fallible lift Parse (string to Result&lt;TSelf&gt;) and the unchecked embedding for values the caller vouches for — and one arrow out, the projection back to the primitive. Validation lives in Parse and only there, so a lifted value is trusted everywhere downstream. ITryParse opts a type into the BCL bool-plus-out shape for ASP.NET model binding, without putting transport concerns in the domain contract.</Description>
 		<Copyright>Copyright (c) 2026 Mark Lauter</Copyright>
 		<PackageProjectUrl>https://github.com/marklauter/value-type</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/marklauter/value-type</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>dotnet</PackageTags>
+		<PackageTags>value-object;value-type;primitive-obsession;parse-dont-validate;strongly-typed;wrapper;domain-modeling;ddd;functional;result;validation;dotnet;msl-armory</PackageTags>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<!-- Before `dotnet pack`: add README.md, LICENSE, and an icon, and wire PackageReadmeFile /
-		     PackageLicenseFile / PackageIcon + their <None Pack="true"> items (see the reference packages). -->
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<!-- No PackageIcon yet: this repo has no images/ artwork. Wire it alongside the icon file. -->
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>README.md</PackagePath>
+		</None>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MSL.Results" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

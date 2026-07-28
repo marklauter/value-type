@@ -13,6 +13,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- IParse<TSelf>.Parse returns Result<TSelf>, so Results is a public-surface dependency, not an implementation detail.
+		     TODO: 1.0.0 is not on nuget.org yet — the marklauter/result repo has to cut its first release before this restores. -->
+		<PackageVersion Include="MSL.Results" Version="1.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<!-- Test + architecture-test stack (VSTest: Microsoft.NET.Test.Sdk + xunit.runner.visualstudio + coverlet) -->
 		<PackageVersion Include="coverlet.collector" Version="10.0.1" />
 		<PackageVersion Include="coverlet.msbuild" Version="10.0.1" />

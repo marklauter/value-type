@@ -54,19 +54,21 @@ public abstract class ArchitectureTestsBase
             .WithoutRequiringPositiveResults());
 
     [Fact]
-    public void InstanceFieldsAreNotPublic() =>
+    public virtual void InstanceFieldsAreNotPublic() =>
         Verify(FieldMembers()
             .That()
             .AreNotStatic() // const / static readonly may be public; instance state must not be.
             .And()
             .DoNotHaveNameContaining("<") // exclude compiler-generated backing fields
+            .And()
+            .DoNotHaveName("value__") // every enum carries a public instance field of this name; it is the enum, not state
             .Should()
             .NotBePublic()
             .Because("writing-csharp: immutable-by-default; no public mutable instance state.")
             .WithoutRequiringPositiveResults());
 
     [Fact]
-    public void PublicTypesAreNotNested() =>
+    public virtual void PublicTypesAreNotNested() =>
         Verify(Types()
             .That()
             .AreNested()
