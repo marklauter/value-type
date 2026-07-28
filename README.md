@@ -10,7 +10,7 @@ ValueTypes targets .NET 10 and builds on [MSL.Results](https://github.com/markla
 
 ## Parse, don't validate
 
-A `string` that arrived from a query string and a `string` you've already checked are the same type to the compiler, so nothing stops you from handing the unchecked one to code that assumes otherwise. Wrapping the primitive closes that gap. The wrapper can only be built by parsing, so holding one is proof the value was checked.
+A `string` that arrived from a query string and a `string` you've already checked are the same type to the compiler. Nothing stops you from handing the unchecked one to code that assumes otherwise. Wrapping the primitive closes that gap: the wrapper can only be built by parsing, so holding one is proof the value was checked.
 
 `IValue<TSelf, TValue>` gives a wrapper two arrows in and one out:
 
@@ -18,7 +18,7 @@ A `string` that arrived from a query string and a `string` you've already checke
 - `Unchecked` — the total embedding, `TValue → TSelf`. Pure assignment: no validation, no normalization. Lawful only on the valid subset the caller vouches for, so misuse is the caller's defect.
 - `Value` — the projection back to the primitive, `TSelf → TValue`.
 
-The contract is self-referential (CRTP), so the static abstract members resolve through the type parameter at every call site, and `TSelf` is constrained to `struct`. Wrappers also get `IComparable<TSelf>`, `IEquatable<TSelf>`, and `IComparisonOperators<TSelf, TSelf, bool>`, so they sort and compare like the primitive they carry.
+The contract is self-referential (CRTP), so the static abstract members resolve through the type parameter at every call site. `TSelf` is constrained to `struct`. Wrappers also get `IComparable<TSelf>`, `IEquatable<TSelf>`, and `IComparisonOperators<TSelf, TSelf, bool>`, so they sort and compare like the primitive they carry.
 
 ## A wrapper
 
@@ -51,7 +51,7 @@ public readonly record struct Slug : IValue<Slug, string>
 
 `Parse` is total over untrusted text: every rejection comes back as a value. It's also the retraction of `ToString()`, so the pair obeys the round-trip law `Parse ∘ ToString = id`.
 
-Whether `null` is valid input is a business rule of the implementing type. Reflection-based callers can deliver null at runtime regardless of the parameter's non-nullable annotation, so a type for which null is invalid checks for it in `Parse`.
+Whether `null` is valid input is a business rule of the implementing type. Reflection-based callers deliver null at runtime regardless of the parameter's non-nullable annotation. A type for which null is invalid checks for it in `Parse`.
 
 Because `Parse` returns a `Result`, independent lifts compose and report every error at once instead of stopping at the first. Curry the constructor and apply once per part:
 
@@ -82,7 +82,7 @@ Types that never bind from a route carry none of this.
 
 ## Composite values
 
-`IParse<TSelf>` has no `struct` constraint. A sealed record whose canonical form spans several parts implements it directly: lift each part, accumulate the errors, and keep `ToString()` as the retraction.
+`IParse<TSelf>` has no `struct` constraint. A sealed record whose canonical form spans several parts implements it directly: lift each part, accumulate the errors, and keep `ToString()` as the canonical text form.
 
 ## API
 
