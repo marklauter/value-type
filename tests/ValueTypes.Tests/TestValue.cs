@@ -13,10 +13,13 @@ public readonly record struct TestValue
 
     public static TestValue Unchecked(string value) => new(value);
 
-    public static Result<TestValue> Parse(string s) =>
-        !string.IsNullOrEmpty(s) && s.All(char.IsAsciiLetterLower)
-            ? Result.Success(new TestValue(s))
-            : Result.Failure<TestValue>(Error.Validation("test.invalid", $"'{s}' is not one or more lowercase ASCII letters"));
+    public static Result<TestValue> Checked(string value) =>
+        !string.IsNullOrEmpty(value) && value.All(char.IsAsciiLetterLower)
+            ? Result.Success(new TestValue(value))
+            : Result.Failure<TestValue>(Error.Validation("test.invalid", $"'{value}' is not one or more lowercase ASCII letters"));
+
+    // TValue is string, so the text-to-primitive leg is the identity and Parse is the delegation the IValue docs prescribe.
+    public static Result<TestValue> Parse(string s) => Checked(s);
 
     // The canonical one-line delegation prescribed by the ITryParse<TSelf> docs.
     public static bool TryParse(string s, out TestValue parsed) =>

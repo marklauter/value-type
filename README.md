@@ -21,11 +21,14 @@ ValueTypes targets .NET 10 and builds on [MSL.Results](https://github.com/markla
 
 A `string` that arrived from a query string and a `string` you've already checked are the same type to the compiler. Nothing stops you from handing the unchecked one to code that assumes otherwise. Wrapping the primitive closes that gap: the wrapper can only be built by parsing, so holding one is proof the value was checked.
 
-`IValue<TSelf, TValue>` gives a wrapper two arrows in and one out:
+`IValue<TSelf, TValue>` gives a wrapper three arrows in and one out:
 
-- `Parse` — the fallible lift, `string → Result<TSelf>`. Inherited from `IParse<TSelf>`. All validation lives here and only here.
+- `Parse` — the fallible lift from text, `string → Result<TSelf>`. Inherited from `IParse<TSelf>`.
+- `Checked` — the fallible embedding of a primitive, `TValue → Result<TSelf>`. Validation lives here. `Parse` factors through it: convert the text to a `TValue`, then defer. When `TValue` is `string` that conversion is the identity, so `Parse` is a one-line delegation.
 - `Unchecked` — the total embedding, `TValue → TSelf`. Pure assignment: no validation, no normalization. Lawful only on the valid subset the caller vouches for, so misuse is the caller's defect.
 - `Value` — the projection back to the primitive, `TSelf → TValue`.
+
+`Checked` is the complement of `Unchecked`, and it's what you reach for when the primitive is already in hand — an `int` off a database row, a `Guid` from another service. Without it the only honest option is to render the value as text and parse it back.
 
 The contract is self-referential (CRTP), so the static abstract members resolve through the type parameter at every call site. `TSelf` is constrained to `struct`. Wrappers also get `IComparable<TSelf>`, `IEquatable<TSelf>`, and `IComparisonOperators<TSelf, TSelf, bool>`, so they sort and compare like the primitive they carry.
 
@@ -42,10 +45,12 @@ public readonly record struct Slug : IValue<Slug, string>
 
     public static Slug Unchecked(string value) => new(value);
 
-    public static Result<Slug> Parse(string s) =>
-        !string.IsNullOrEmpty(s) && s.All(c => char.IsAsciiLetterLower(c) || c == '-')
-            ? Result.Success(new Slug(s))
-            : Result.Failure<Slug>(Error.Validation("slug.invalid", $"'{s}' is not a lowercase hyphenated slug."));
+    public static Result<Slug> Checked(string value) =>
+        !string.IsNullOrEmpty(value) && value.All(c => char.IsAsciiLetterLower(c) || c == '-')
+            ? Result.Success(new Slug(value))
+            : Result.Failure<Slug>(Error.Validation("slug.invalid", $"'{value}' is not a lowercase hyphenated slug."));
+
+    public static Result<Slug> Parse(string s) => Checked(s);
 
     public override string ToString() => value;
 
@@ -60,7 +65,7 @@ public readonly record struct Slug : IValue<Slug, string>
 
 `Parse` is total over untrusted text: every rejection comes back as a value. `ToString()` renders the canonical text form, and parsing that text recovers the value it came from: `Parse(x.ToString()) == Success(x)`.
 
-Whether `null` is valid input is a business rule of the implementing type. Reflection-based callers deliver null at runtime regardless of the parameter's non-nullable annotation. A type for which null is invalid checks for it in `Parse`.
+Whether `null` is valid input is a business rule of the implementing type. Reflection-based callers deliver null at runtime regardless of the parameter's non-nullable annotation. A type for which null is invalid checks for it in `Checked`.
 
 Because `Parse` returns a `Result`, independent lifts compose and report every error at once instead of stopping at the first. Curry the constructor and apply once per part:
 
@@ -98,6 +103,7 @@ Types that never bind from a route carry none of this.
 | Member | What it does |
 | --- | --- |
 | `IValue<TSelf, TValue>` | The wrapper contract. Constrains `TSelf` to `struct`. Inherits `IParse`, `IComparable`, `IEquatable`, `IComparisonOperators`. |
+| `IValue.Checked(value)` | `static abstract Result<TSelf> Checked(TValue)`. Validates a primitive the caller already holds. Where the validation rules live; `Parse` defers to it. |
 | `IValue.Unchecked(value)` | Total embedding of a trusted, already-canonical primitive. No validation. |
 | `IValue.Value` | Projection back to the wrapped primitive. |
 | `IParse<TSelf>` | `static abstract Result<TSelf> Parse(string)`. No `struct` constraint, so composite records implement it too. |
