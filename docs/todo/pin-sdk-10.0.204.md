@@ -5,8 +5,11 @@ tags: [todo, global-json, sdk, house-canon]
 created: 2026-07-28
 priority: medium
 effort: low
-status: open
+status: declined
+closed: 2026-07-29
 ---
+
+Declined 2026-07-29. `global.json` stays at `10.0.100` / `latestFeature`.
 
 Carried from plumber, which was scaffolded from the same template and has this
 todo open too. result carries it as well.

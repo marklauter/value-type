@@ -10,9 +10,19 @@ status: open
 
 Bring `marklauter/value-type` in line with `marklauter/plumber` and
 `marklauter/pool`, the two reference repos for the house standard. The
-branch ruleset is already applied; everything below is outstanding.
+branch ruleset is already applied.
 
 ## Done
+
+**Repo settings** (applied 2026-07-29) — `delete_branch_on_merge` and
+`allow_auto_merge` are both `true`, and the fork-PR CI approval policy is
+`all_external_contributors`. The table below now matches on every row.
+
+**`NUGET_API_KEY`** — added 2026-07-29 as a repository Actions secret.
+
+**Workflows and Dependabot** — all four workflow files and
+`.github/dependabot.yml` ship on the `scaffold-value-type` branch and land on
+`main` when PR #1 merges.
 
 **Branch ruleset `main`** (created 2026-07-28, id `19931264`) — identical to
 plumber's and pool's:
@@ -28,13 +38,14 @@ plumber's and pool's:
 
 ## Repo settings
 
-Both reference repos carry these; value-type differs on the first three.
+Both reference repos carry these; value-type matches on every row as of
+2026-07-29.
 
 | Setting | plumber / pool | value-type |
 | --- | --- | --- |
-| `delete_branch_on_merge` | `true` | `false` |
-| `allow_auto_merge` | `true` | `false` |
-| fork-PR CI approval policy | `all_external_contributors` | `first_time_contributors` |
+| `delete_branch_on_merge` | `true` | same |
+| `allow_auto_merge` | `true` | same |
+| fork-PR CI approval policy | `all_external_contributors` | same |
 | `allow_squash_merge` | `true` | `true` |
 | `allow_rebase_merge` | `true` | `true` |
 | `allow_merge_commit` | `true` | `true` |
@@ -82,7 +93,7 @@ The `code_scanning` merge gate (block PRs on high CodeQL findings) is
 deliberately left off until CodeQL has run at least once on this repo —
 adding it first deadlocks merges under an admin-enforced ruleset.
 
-## Secret to add
+## Remaining
 
-`NUGET_API_KEY` — repository Actions secret, consumed by
-`dotnet.publish.yml`. Not yet present on value-type.
+Decide whether value-type needs plumber's `.github/actions/` composite actions
+and its `github-pages` environment. pool has neither.

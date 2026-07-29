@@ -37,7 +37,8 @@
 		<ThresholdStat>minimum</ThresholdStat>
 		<!-- Exception types are plumbing; exclude from coverage to avoid noise. -->
 		<!-- Architecture.Testing is test infrastructure, not shipped code: it carries base rules this repo's derived tests may not all exercise, so measuring it would set the floor from the test harness rather than the package. -->
-		<Exclude>[*]*Exception,[Architecture.Testing]*</Exclude>
+		<!-- MSL.Results ships its symbols in a snupkg, so coverlet finds no pdb beside Results.dll and warns on every run. It is a third-party dependency, not this package's code. -->
+		<Exclude>[*]*Exception,[Architecture.Testing]*,[Results]*</Exclude>
 		<!-- Source-generated files (e.g. [LoggerMessage] partials) are plumbing too. -->
 		<ExcludeByFile>**/obj/**/*.g.cs</ExcludeByFile>
 		<!-- CA1707 underscores-in-names : test methods use Method_Scenario_Outcome. -->

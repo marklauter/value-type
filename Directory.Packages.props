@@ -13,8 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- IParse<TSelf>.Parse returns Result<TSelf>, so Results is a public-surface dependency, not an implementation detail.
-		     TODO: 1.0.0 is not on nuget.org yet — the marklauter/result repo has to cut its first release before this restores. -->
+		<!-- IParse<TSelf>.Parse returns Result<TSelf>, so Results is a public-surface dependency, not an implementation detail. -->
 		<PackageVersion Include="MSL.Results" Version="1.0.0" />
 	</ItemGroup>
 

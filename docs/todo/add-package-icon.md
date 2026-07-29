@@ -5,8 +5,16 @@ tags: [todo, packaging, nuget, branding]
 created: 2026-07-28
 priority: medium
 effort: low
-status: open
+status: closed
+closed: 2026-07-29
 ---
+
+Closed 2026-07-29. The placeholder files were removed. The packed NuGet icon is
+now `images/msl.rocket.tx.clean.small.png` (128x128, the rocket mark alone,
+byte-identical to result's), and the README header features only
+`images/msl.armory.small.png` — the ValueTypes-specific logo role is gone, which
+matches what result did. `dotnet pack -c Release` verified the icon lands in the
+nupkg.
 
 The logo is a placeholder: a slate tile with a dashed border reading
 `IValue<T>` / `PLACEHOLDER` / `replace me`. It ships in the package, so it
