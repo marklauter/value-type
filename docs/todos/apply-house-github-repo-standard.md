@@ -1,7 +1,8 @@
 ---
 title: Apply the house GitHub repo standard to value-type
+type: todo
 summary: Catalog of the repo settings, workflows, and Dependabot config that plumber and pool share; value-type has the main ruleset already and needs the rest.
-tags: [todo, github, repo-standard, ci, house-canon]
+tags: [github, repo-standard, ci, house-canon]
 created: 2026-07-28
 priority: medium
 effort: medium
@@ -9,9 +10,9 @@ status: closed
 closed: 2026-07-29
 ---
 
-Closed 2026-07-29. Every item is either applied or deliberately declined; see
-Done and Closed questions below. The only thing outstanding is PR #1 merging,
-which lands the workflow files on `main` — tracked by the PR, not here.
+Closed 2026-07-29. Every item is applied or declined; see Done, Declined, and
+Closed questions below. The one thing outstanding is PR #1 merging, which
+lands the workflow files on `main`. The PR tracks that.
 
 Bring `marklauter/value-type` in line with `marklauter/plumber` and
 `marklauter/pool`, the two reference repos for the house standard. The
@@ -94,12 +95,12 @@ See Closed questions for `.github/actions/` and `github-pages`.
 
 The `code_scanning` merge gate (block PRs on high CodeQL findings) — declined
 2026-07-29. No sibling repo carries it. CodeQL for C# with `build-mode: none`
-does source-only dataflow, and this package is four interface files with no
-I/O, no parsing of its own, and no deserialization, so the realistic finding
-rate is near zero and the false-positive rate is not. It would also make
-CodeQL a required check, letting a CodeQL outage block merges under an
-admin-enforced ruleset with no bypass. Revisit only if value-type grows
-surface that touches untrusted input or credentials.
+does source-only dataflow, and this package is four contract files with no
+I/O, no parsing of its own, and no deserialization. The finding rate against
+that surface is near zero. The false-positive rate is not, and each dismissal
+costs ceremony. The gate would also make CodeQL a required check, so a CodeQL
+outage blocks merges under an admin-enforced ruleset with no bypass. Revisit
+if value-type grows surface that touches untrusted input or credentials.
 
 ## Closed questions
 
