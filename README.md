@@ -1,4 +1,14 @@
+[![.NET Tests](https://github.com/marklauter/value-type/actions/workflows/dotnet.tests.yml/badge.svg)](https://github.com/marklauter/value-type/actions/workflows/dotnet.tests.yml)
+[![.NET Publish](https://github.com/marklauter/value-type/actions/workflows/dotnet.publish.yml/badge.svg)](https://github.com/marklauter/value-type/actions/workflows/dotnet.publish.yml)
+[![NuGet](https://img.shields.io/nuget/v/MSL.ValueTypes?logo=nuget)](https://www.nuget.org/packages/MSL.ValueTypes/)
+[![.NET](https://img.shields.io/badge/.NET-10.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/10.0/)
+
+![ValueTypes](https://raw.githubusercontent.com/marklauter/value-type/main/images/valuetypes-logo.png "ValueTypes")
+![MSL Armory](https://raw.githubusercontent.com/marklauter/value-type/main/images/msl.armory.small.png "MSL Armory")
+
 # ValueTypes
+
+*Another weapon from the MSL Armory*
 
 Contracts for strongly-typed wrappers that embed a primitive in your domain, so a bare `string` is no longer assignment-compatible with a checked value.
 
@@ -95,6 +105,5 @@ Types that never bind from a route carry none of this.
 | `ITryParse<TSelf>` | Extends `IParse`. Adds `static abstract bool TryParse(string, out TSelf)` for reflection-based binders. |
 | `ValueParser.TryParse<TSelf>` | The canonical `TryParse` body. Projects `Parse` to `bool`-plus-`out`, discarding errors. |
 
-## License
-
-MIT. See [LICENSE](LICENSE).
+---
+[Repository](https://github.com/marklauter/value-type) · [NuGet](https://www.nuget.org/packages/MSL.ValueTypes/) · [MIT License](https://github.com/marklauter/value-type/blob/main/LICENSE) · [Report an issue](https://github.com/marklauter/value-type/issues)

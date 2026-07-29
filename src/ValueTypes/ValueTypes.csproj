@@ -17,10 +17,15 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<!-- No PackageIcon yet: this repo has no images/ artwork. Wire it alongside the icon file. -->
+		<PackageIcon>valuetypes-logo.small.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- The 128x128 variant is the packed icon; images/valuetypes-logo.png is the 256x256 the README embeds. -->
+		<None Include="..\..\images\valuetypes-logo.small.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>README.md</PackagePath>
