@@ -4,7 +4,7 @@ namespace ValueTypes;
 
 /// <summary>
 /// The REST-boundary opt-in: the BCL <c>bool</c>+<c>out</c> shape that ASP.NET Core's parameter binder and other reflection-based pipelines discover on the
-/// concrete type. Only types that cross that boundary implement this. It is deliberately <b>not</b> part of <see cref="IValue{TSelf, TValue}"/>, so
+/// concrete type. Only types that cross that boundary implement this. It is deliberately <b>not</b> part of <see cref="IValueType{TSelf, TValue}"/>, so
 /// value types that never bind from a route or query string don't carry transport concerns. Extends <see cref="IParse{TSelf}"/> because <see cref="TryParse"/>
 /// is its lossy projection: the accumulated <see cref="Results.Error"/>s are discarded.
 /// </summary>

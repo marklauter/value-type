@@ -29,12 +29,12 @@ namespace ValueTypes;
 /// they participate in sorting, equality, and ordered comparisons.
 /// </para>
 /// </remarks>
-public interface IValue<TSelf, TValue>
+public interface IValueType<TSelf, TValue>
     : IParse<TSelf>
     , IComparable<TSelf>
     , IEquatable<TSelf>
     , IComparisonOperators<TSelf, TSelf, bool>
-    where TSelf : struct, IValue<TSelf, TValue>
+    where TSelf : struct, IValueType<TSelf, TValue>
 {
     /// <summary>
     /// The projection back to the primitive: the underlying <typeparamref name="TValue"/> the wrapper carries.

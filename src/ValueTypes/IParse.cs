@@ -5,10 +5,10 @@ namespace ValueTypes;
 /// <summary>
 /// The fallible lift from text into the domain: a Kleisli arrow <c>string → Result&lt;TSelf&gt;</c> in the validation applicative. <see cref="Parse"/> is total
 /// on untrusted text: every rejection is a value, never an exception. Nothing downstream re-validates, so a lifted value is trusted everywhere. Implemented by
-/// <see cref="IValue{TSelf, TValue}"/> wrappers, which inherit it and factor it through <see cref="IValue{TSelf, TValue}.Checked"/> so the text and primitive
-/// entry points cannot disagree, and by composite value records whose canonical form spans multiple parts, where each part is lifted and the errors accumulated
-/// applicatively. <c>ToString()</c> renders the canonical text form and <see cref="Parse"/>
-/// is its retraction: the pair obeys the round-trip law <c>Parse(x.ToString()) == Success(x)</c>.
+/// <see cref="IValueType{TSelf, TValue}"/> wrappers, which inherit it and factor it through <see cref="IValueType{TSelf, TValue}.Checked"/> so the text and
+/// primitive entry points cannot disagree, and by composite value records whose canonical form spans multiple parts, where each part is lifted and the errors
+/// accumulated applicatively. <c>ToString()</c> renders the canonical text form and <see cref="Parse"/> is its retraction: the pair obeys the round-trip law
+/// <c>Parse(x.ToString()) == Success(x)</c>.
 /// </summary>
 /// <typeparam name="TSelf">The implementing type. Self-referential (CRTP) so the static abstract member resolves through the type parameter at every call site.
 /// No struct constraint. Sealed records implement this alongside value-type wrappers.</typeparam>

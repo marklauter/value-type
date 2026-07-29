@@ -21,7 +21,7 @@ ValueTypes targets .NET 10 and builds on [MSL.Results](https://github.com/markla
 
 A `string` that arrived from a query string and a `string` you've already checked are the same type to the compiler. Nothing stops you from handing the unchecked one to code that assumes otherwise. Wrapping the primitive closes that gap: the wrapper can only be built by parsing, so holding one is proof the value was checked.
 
-`IValue<TSelf, TValue>` gives a wrapper three arrows in and one out:
+`IValueType<TSelf, TValue>` gives a wrapper three arrows in and one out:
 
 - `Parse` — the fallible lift from text, `string → Result<TSelf>`. Inherited from `IParse<TSelf>`.
 - `Checked` — the fallible embedding of a primitive, `TValue → Result<TSelf>`. Validation lives here. `Parse` factors through it: convert the text to a `TValue`, then defer. When `TValue` is `string` that conversion is the identity, so `Parse` is a one-line delegation.
@@ -35,7 +35,7 @@ The contract is self-referential (CRTP), so the static abstract members resolve 
 ## A wrapper
 
 ```csharp
-public readonly record struct Slug : IValue<Slug, string>
+public readonly record struct Slug : IValueType<Slug, string>
 {
     private readonly string value;
 
@@ -79,10 +79,10 @@ Result<Article> article = Result.Apply(
 
 ## Binding from a route or query string
 
-ASP.NET Core's parameter binder discovers the BCL `bool`-plus-`out` `TryParse` on the concrete type. That's a transport concern, so it isn't part of `IValue`. Types that cross the boundary opt in with `ITryParse<TSelf>` and delegate:
+ASP.NET Core's parameter binder discovers the BCL `bool`-plus-`out` `TryParse` on the concrete type. That's a transport concern, so it isn't part of `IValueType`. Types that cross the boundary opt in with `ITryParse<TSelf>` and delegate:
 
 ```csharp
-public readonly record struct Slug : IValue<Slug, string>, ITryParse<Slug>
+public readonly record struct Slug : IValueType<Slug, string>, ITryParse<Slug>
 {
     public static bool TryParse(string s, out Slug parsed) => ValueParser.TryParse(s, out parsed);
 
@@ -102,10 +102,10 @@ Types that never bind from a route carry none of this.
 
 | Member | What it does |
 | --- | --- |
-| `IValue<TSelf, TValue>` | The wrapper contract. Constrains `TSelf` to `struct`. Inherits `IParse`, `IComparable`, `IEquatable`, `IComparisonOperators`. |
-| `IValue.Checked(value)` | `static abstract Result<TSelf> Checked(TValue)`. Validates a primitive the caller already holds. Where the validation rules live; `Parse` defers to it. |
-| `IValue.Unchecked(value)` | Total embedding of a trusted, already-canonical primitive. No validation. |
-| `IValue.Value` | Projection back to the wrapped primitive. |
+| `IValueType<TSelf, TValue>` | The wrapper contract. Constrains `TSelf` to `struct`. Inherits `IParse`, `IComparable`, `IEquatable`, `IComparisonOperators`. |
+| `IValueType.Checked(value)` | `static abstract Result<TSelf> Checked(TValue)`. Validates a primitive the caller already holds. Where the validation rules live; `Parse` defers to it. |
+| `IValueType.Unchecked(value)` | Total embedding of a trusted, already-canonical primitive. No validation. |
+| `IValueType.Value` | Projection back to the wrapped primitive. |
 | `IParse<TSelf>` | `static abstract Result<TSelf> Parse(string)`. No `struct` constraint, so composite records implement it too. |
 | `ITryParse<TSelf>` | Extends `IParse`. Adds `static abstract bool TryParse(string, out TSelf)` for reflection-based binders. |
 | `ValueParser.TryParse<TSelf>` | The canonical `TryParse` body. Projects `Parse` to `bool`-plus-`out`, discarding errors. |
