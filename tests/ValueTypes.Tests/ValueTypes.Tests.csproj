@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!-- Coverage measures the shipped package and nothing else: not the test double, not the arch-test base, not MSL.Results. -->
+		<Include>[ValueTypes]*</Include>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Architecture.Testing\Architecture.Testing.csproj" />
+		<ProjectReference Include="..\..\src\ValueTypes\ValueTypes.csproj" />
+	</ItemGroup>
+
+</Project>

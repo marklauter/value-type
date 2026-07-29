@@ -1,0 +1,44 @@
+<Project>
+
+	<Sdk Name="Microsoft.NET.Sdk" />
+
+	<PropertyGroup>
+		<IsPackable>true</IsPackable>
+		<PackageId>MSL.$(AssemblyName)</PackageId>
+		<Title>ValueTypes — parse-don't-validate wrappers for the primitives your domain cares about</Title>
+		<Authors>Mark Lauter</Authors>
+		<Description>Contracts for strongly-typed wrappers that embed a primitive in the domain. IValueType&lt;TSelf, TValue&gt; is self-referential (CRTP) so its static abstract members resolve through the type parameter at every call site: three arrows in — the fallible lift Parse (string to Result&lt;TSelf&gt;), the checked embedding of a primitive the caller already holds, and the unchecked embedding for values the caller vouches for — and one arrow out, the projection back to the primitive. Validation lives in Checked, and Parse factors through it, so a lifted value is trusted everywhere downstream. ITryParse opts a type into the BCL bool-plus-out shape for ASP.NET model binding, without putting transport concerns in the domain contract.</Description>
+		<Copyright>Copyright (c) 2026 Mark Lauter</Copyright>
+		<PackageProjectUrl>https://github.com/marklauter/value-type</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/marklauter/value-type</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>value-object;value-type;primitive-obsession;parse-dont-validate;strongly-typed;wrapper;domain-modeling;ddd;functional;result;validation;dotnet;msl-armory</PackageTags>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageIcon>msl.rocket.tx.clean.small.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- The 128x128 rocket mark, byte-identical to result's packed icon. -->
+		<None Include="..\..\images\msl.rocket.tx.clean.small.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>README.md</PackagePath>
+		</None>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- SourceLink needs no package on net10.0: the SDK has shipped it since .NET 8, and the PDB carries the document map without one. -->
+		<PackageReference Include="MSL.Results" />
+	</ItemGroup>
+
+</Project>
