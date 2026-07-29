@@ -93,7 +93,15 @@ The `code_scanning` merge gate (block PRs on high CodeQL findings) is
 deliberately left off until CodeQL has run at least once on this repo —
 adding it first deadlocks merges under an admin-enforced ruleset.
 
-## Remaining
+## Closed questions
 
-Decide whether value-type needs plumber's `.github/actions/` composite actions
-and its `github-pages` environment. pool has neither.
+`.github/actions/setup-dotnet/action.yml` — value-type, plumber, and pool all
+ship this file byte-identical. Nothing to decide; the earlier note claiming
+only plumber had it was wrong.
+
+`github-pages` — declined 2026-07-29. plumber's environment is not created by
+any workflow: it is GitHub's legacy branch-based Pages source pointed at
+`main:/docs`, publishing the agent-docs corpus with no index and no
+`_config.yml`. pool does not have it. value-type does not want it.
+
+The `code_scanning` merge gate stays deferred, per the section above.
