@@ -8,11 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- SourceLink (package scaffold only) -->
-		<PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.301" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<!-- IParse<TSelf>.Parse returns Result<TSelf>, so Results is a public-surface dependency, not an implementation detail. -->
 		<PackageVersion Include="MSL.Results" Version="1.0.0" />
 	</ItemGroup>

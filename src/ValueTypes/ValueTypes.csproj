@@ -37,11 +37,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- SourceLink needs no package on net10.0: the SDK has shipped it since .NET 8, and the PDB carries the document map without one. -->
 		<PackageReference Include="MSL.Results" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 	</ItemGroup>
 
 </Project>
