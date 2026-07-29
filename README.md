@@ -49,7 +49,7 @@ public readonly record struct Slug : IValue<Slug, string>
 }
 ```
 
-`Parse` is total over untrusted text: every rejection comes back as a value. It's also the retraction of `ToString()`, so the pair obeys the round-trip law `Parse ∘ ToString = id`.
+`Parse` is total over untrusted text: every rejection comes back as a value. `ToString()` renders the canonical text form, and parsing that text recovers the value it came from: `Parse(x.ToString()) == Success(x)`.
 
 Whether `null` is valid input is a business rule of the implementing type. Reflection-based callers deliver null at runtime regardless of the parameter's non-nullable annotation. A type for which null is invalid checks for it in `Parse`.
 
