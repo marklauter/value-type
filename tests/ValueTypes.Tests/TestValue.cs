@@ -16,7 +16,9 @@ public readonly record struct TestValue
     public static Result<TestValue> Checked(string value) =>
         !string.IsNullOrEmpty(value) && value.All(char.IsAsciiLetterLower)
             ? Result.Success(new TestValue(value))
-            : Result.Failure<TestValue>(Error.Validation("test.invalid", $"'{value}' is not one or more lowercase ASCII letters"));
+            : Result.Failure<TestValue>(Error.Validation(
+                ErrorCode.Unchecked("test.invalid"),
+                ErrorMessage.Unchecked($"'{value}' is not one or more lowercase ASCII letters")));
 
     // TValue is string, so the text-to-primitive leg is the identity and Parse is the delegation the IValueType docs prescribe.
     public static Result<TestValue> Parse(string s) => Checked(s);

@@ -48,7 +48,9 @@ public readonly record struct Slug : IValueType<Slug, string>
     public static Result<Slug> Checked(string value) =>
         !string.IsNullOrEmpty(value) && value.All(c => char.IsAsciiLetterLower(c) || c == '-')
             ? Result.Success(new Slug(value))
-            : Result.Failure<Slug>(Error.Validation("slug.invalid", $"'{value}' is not a lowercase hyphenated slug."));
+            : Result.Failure<Slug>(Error.Validation(
+                ErrorCode.Unchecked("slug.invalid"),
+                ErrorMessage.Unchecked($"'{value}' is not a lowercase hyphenated slug.")));
 
     public static Result<Slug> Parse(string s) => Checked(s);
 
