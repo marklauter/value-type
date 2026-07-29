@@ -19,7 +19,7 @@ ValueTypes targets .NET 10 and builds on [MSL.Results](https://github.com/markla
 
 ## Parse, don't validate
 
-A `string` that arrived from a query string and a `string` you've already checked are the same type to the compiler. Nothing stops you from handing the unchecked one to code that assumes otherwise. Wrapping the primitive closes that gap: the wrapper can only be built by parsing, so holding one is proof the value was checked.
+A `string` that arrived from a query string and a `string` you've already checked are the same type to the compiler. Nothing stops you from handing the unchecked one to code that assumes otherwise. Wrapping the primitive closes that gap. The wrapper's constructor is private, so the only ways in are `Parse`, `Checked`, and `Unchecked`: two that validate, and one that puts the caller's claim in writing at the call site.
 
 `IValueType<TSelf, TValue>` gives a wrapper three arrows in and one out:
 
@@ -28,7 +28,7 @@ A `string` that arrived from a query string and a `string` you've already checke
 - `Unchecked` — the total embedding, `TValue → TSelf`. Pure assignment: no validation, no normalization. Lawful only on the valid subset the caller vouches for, so misuse is the caller's defect.
 - `Value` — the projection back to the primitive, `TSelf → TValue`.
 
-`Checked` is the complement of `Unchecked`, and it's what you reach for when the primitive is already in hand — an `int` off a database row, a `Guid` from another service. Without it the only honest option is to render the value as text and parse it back.
+`Checked` and `Unchecked` are a pair over where the primitive came from. Reach for `Checked` at the edge, where the value is untrusted: an `int` off a database row, a `Guid` from another service, or the body of `Parse`, which is the edge by definition. Reach for `Unchecked` when you author the value yourself: a constant, a static seed, a test fixture.
 
 The contract is self-referential (CRTP), so the static abstract members resolve through the type parameter at every call site. `TSelf` is constrained to `struct`. Wrappers also get `IComparable<TSelf>`, `IEquatable<TSelf>`, and `IComparisonOperators<TSelf, TSelf, bool>`, so they sort and compare like the primitive they carry.
 
