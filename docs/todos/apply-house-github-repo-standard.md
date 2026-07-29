@@ -5,8 +5,13 @@ tags: [todo, github, repo-standard, ci, house-canon]
 created: 2026-07-28
 priority: medium
 effort: medium
-status: open
+status: closed
+closed: 2026-07-29
 ---
+
+Closed 2026-07-29. Every item is either applied or deliberately declined; see
+Done and Closed questions below. The only thing outstanding is PR #1 merging,
+which lands the workflow files on `main` — tracked by the PR, not here.
 
 Bring `marklauter/value-type` in line with `marklauter/plumber` and
 `marklauter/pool`, the two reference repos for the house standard. The
@@ -72,26 +77,29 @@ Both reference repos ship the same four files under `.github/workflows/`:
 - `dotnet.tests.yml` — build and test on PR and push.
 - `dotnet.publish.yml` — packs and pushes to NuGet on release, using the
   `NUGET_API_KEY` repository secret. value-type ships as a package, so this
-  one is required and the secret has to be added.
+  one is required; the secret is present.
 - `codeql.yml` — committed advanced setup, not GitHub's API default setup.
   C# uses `build-mode: none`.
 - `dependabot-auto-merge.yml` — auto-merges patch and minor Dependabot PRs
   once checks pass; majors stay manual.
 
-plumber also has a `.github/actions/` directory of composite actions and a
-`github-pages` environment; pool has neither. Decide whether value-type
-needs either.
+See Closed questions for `.github/actions/` and `github-pages`.
 
 ## Dependabot
 
 `.github/dependabot.yml`, weekly, open-PR limit 10, NuGet ecosystem with
 `directory: "/"` (NuGet recurses subdirectories).
 
-## Deferred
+## Declined
 
-The `code_scanning` merge gate (block PRs on high CodeQL findings) is
-deliberately left off until CodeQL has run at least once on this repo —
-adding it first deadlocks merges under an admin-enforced ruleset.
+The `code_scanning` merge gate (block PRs on high CodeQL findings) — declined
+2026-07-29. No sibling repo carries it. CodeQL for C# with `build-mode: none`
+does source-only dataflow, and this package is four interface files with no
+I/O, no parsing of its own, and no deserialization, so the realistic finding
+rate is near zero and the false-positive rate is not. It would also make
+CodeQL a required check, letting a CodeQL outage block merges under an
+admin-enforced ruleset with no bypass. Revisit only if value-type grows
+surface that touches untrusted input or credentials.
 
 ## Closed questions
 
@@ -104,4 +112,4 @@ any workflow: it is GitHub's legacy branch-based Pages source pointed at
 `main:/docs`, publishing the agent-docs corpus with no index and no
 `_config.yml`. pool does not have it. value-type does not want it.
 
-The `code_scanning` merge gate stays deferred, per the section above.
+The `code_scanning` merge gate is declined, per the section above.
